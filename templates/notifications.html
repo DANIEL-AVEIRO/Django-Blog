@@ -1,0 +1,16 @@
+{% extends 'components/base.html' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block body %}
+<h1 class="text-center mb-5">Notifications</h1>
+
+{% for notification in notifications %}
+
+<div class="alert alert-success" role="alert">
+    {{notification.title}}
+</div>
+
+{% endfor %}
+
+{% endblock %}

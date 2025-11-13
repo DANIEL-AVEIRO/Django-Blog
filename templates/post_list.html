@@ -1,0 +1,52 @@
+{% extends 'components/base.html' %}
+
+{% block title %}Post List{% endblock %}
+
+{% block body %}
+<h1 class="text-center mb-5">Post List</h1>
+
+<a href="/post/create/" class="btn btn-success">+ Add New Post</a>
+
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Title</th>
+            <th scope="col">Category</th>
+            <th scope="col">Description</th>
+            <th scope="col">Active</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in posts %}
+        <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{post.title}}</td>
+            <td>{{post.category.name}}</td>
+            <td>{{post.description}}</td>
+            <td>
+                {% if post.is_active %}
+                <!-- <a href="/post/deactivate/{{post.id}}/" class="btn btn-danger">Deactivate</a> -->
+                <form method="POST" action="/post/deactivate/{{post.id}}/">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Deactivate</button>
+                </form>
+                {% else %}
+                <!-- <a href="/post/activate/{{post.id}}/" class="btn btn-success">Activate</a> -->
+                <form method="POST" action="/post/activate/{{post.id}}/">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Activate</button>
+                </form>
+                {% endif %}
+            </td>
+            <td>
+                <a href="/post/update/{{post.id}}/" class="btn btn-warning">Update</a>
+                <a href="/post/delete/{{post.id}}/" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

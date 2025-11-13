@@ -1,0 +1,33 @@
+{% extends 'components/base.html' %}
+
+{% block title %}Post Create{% endblock %}
+
+{% block body %}
+<h1 class="text-center">Post Create</h1>
+<a href="/post/list/" class="btn btn-success">Go Back To Product List</a>
+<form class="mt-5" method="POST" action="/post/create/" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" id="title">
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Image</label>
+        <input type="file" name="image" class="form-control" id="image">
+    </div>
+    <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select class="form-control" name="category">
+            {% for category in categories %}
+            <option value="{{category.id}}">{{category.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" name="description" class="form-control" rows="10"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+{% endblock %}

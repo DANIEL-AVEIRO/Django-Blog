@@ -1,0 +1,66 @@
+{% extends 'components/base.html' %}
+
+{% block title %}Post Detail{% endblock %}
+
+{% block body %}
+{% load humanize %}
+<h1 class="text-center">Post Detail</h1>
+<a href="/" class="btn btn-success">Go Back To Product List</a>
+
+<div class="card mb-3 mt-5">
+    <div class="row g-0">
+        {% if post.image %}
+        <img src="{{post.image.url}}" style="width:300px;height: 100%;" class="img-fluid rounded-start"
+            alt="{{post.title}}">
+        {% endif %}
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{post.title}}</h5>
+                <p class="card-text">{{post.description}}</p>
+                <p class="card-text"><small class="text-muted">Last updated {{post.updated_at}}</small></p>
+                {% if not request.user in post.reaction.all %}
+                <a href="/post/reaction/{{ post.id }}/" class="btn btn-primary">Like</a> ({{ post.reaction.count }})
+                {% else %}
+                <a href="/post/reaction/{{ post.id }}/" class="btn btn-success">Liked</a> ({{ post.reaction.count }})
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if request.user.is_authenticated %}
+<form class="mt-5" method="POST" action="/comment/create/{{post.id}}/">
+    {% csrf_token %}
+    <div class="mb-3">
+        <textarea class="form-control" name="message" rows="5" placeholder="Write a comment"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Comment</button>
+</form>
+{% endif %}
+
+<div class="mt-5" id="comment-box">
+
+    <h3 class="text-center">Comments</h3>
+
+
+    {% for comment in comments %}
+    <div class="alert alert-secondary mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <p>{{comment.message}}</p>
+                <span class="text-muted">{{comment.created_at | naturalday}} written by
+                    {{comment.author.username}}</span>
+            </div>
+            <div>
+                {% if request.user.id == comment.author.id %}
+                <a href="#" class="btn btn-primary">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

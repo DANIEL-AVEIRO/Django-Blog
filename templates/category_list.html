@@ -1,0 +1,32 @@
+{% extends 'components/base.html' %}
+
+{% block title %}Category List{% endblock %}
+
+{% block body %}
+<h1 class="text-center mb-5">Category List</h1>
+
+<a href="/category/create/" class="btn btn-success">+ Add New Category</a>
+
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Name</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for category in categories %}
+        <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{category.name}}</td>
+            <td>
+                <a href="/category/update/{{category.id}}/" class="btn btn-warning">Update</a>
+                <a href="/category/delete/{{category.id}}/" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

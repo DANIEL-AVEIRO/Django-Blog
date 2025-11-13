@@ -1,0 +1,27 @@
+{% extends 'components/base.html' %}
+
+{% block title %}Category Delete{% endblock %}
+
+{% block body %}
+<h1 class="text-center">Category Delete</h1>
+<div>
+    <div class="modal-dialog">
+        <form class="modal-content" method="POST" action="/category/delete/{{category.id}}/">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title">{{category.name}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Yes</button>
+                <button type="button" onclick="window.location.href='/category/list/'"
+                    class="btn btn-danger">No</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
