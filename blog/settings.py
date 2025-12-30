@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -121,6 +120,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = "staticfiles"
+STATICFILES_DIR = [os.path.join(BASE_DIR,'static')]
 
 
 MEDIA_URL = "media/"
@@ -139,3 +140,12 @@ MESSAGE_TAGS = {
     messages.INFO: "alert-primary",
     messages.WARNING: "alert-warning",
 }
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "codedbydaniel@gmail.com"
+EMAIL_HOST_PASSWORD = "rmur bvny mepb lzbm"
+DEFAULT_FROM_EMAIL = "codedbydaniel@gmail.com"

@@ -3,9 +3,11 @@ from myapp.models import CategoryModel, PostModel, CommentModel, NotificationMod
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def Index(request):
@@ -48,6 +50,14 @@ def PostCreate(request):
             title=title, description=description, image=image, category_id=category
         )
         post.save()
+
+        users = User.objects.all()
+
+        subject = "New Post For You"
+        message = f"Post title is {post.title}"
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [user.email for user in users]
+        send_mail(subject, message, email_from, recipient_list)
 
         notification = NotificationModel.objects.create(
             title=f"New post for you. title is {post.title}"
@@ -134,11 +144,13 @@ def PostDeactivate(request, pk):
         return redirect("/post/list/")
 
 
+@permission_required("myapp.view_categorymodel", login_url="/login/")
 def CategoryList(request):
     categories = CategoryModel.objects.all()
     return render(request, "category_list.html", {"categories": categories})
 
 
+@permission_required("myapp.add_categorymodel", login_url="/login/")
 def CategoryCreate(request):
     if request.method == "GET":
         return render(request, "category_create.html")
@@ -224,8 +236,15 @@ def Register(request):
             username=username,
             email=email,
             password=password,
+            is_active = False
+            
         )
         user.save()
+        subject = "New Registration"
+        message = f"Welcome New User {user.username}"
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+        send_mail(subject, message, email_from, recipient_list)
         # login(request, user)
         messages.success(request, f"Account was created for {user.username}")
         return redirect("/")
